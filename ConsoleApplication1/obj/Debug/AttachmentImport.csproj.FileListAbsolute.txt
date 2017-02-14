@@ -1,0 +1,16 @@
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\Elasticsearch.Net.dll
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\Nest.dll
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\Newtonsoft.Json.dll
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\Elasticsearch.Net.pdb
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\Elasticsearch.Net.xml
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\Nest.pdb
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\Nest.xml
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\Newtonsoft.Json.xml
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\obj\Debug\AttachmentImport.csprojResolveAssemblyReference.cache
+D:\Development\DotNet\AttachmentParser\ConsoleApplication1\ConsoleApplication1\bin\Debug\AttachmentImport.exe.config
+D:\Development\External-Git\ElasticSearch-Importer\ConsoleApplication1\bin\Debug\AttachmentImport.exe.config
