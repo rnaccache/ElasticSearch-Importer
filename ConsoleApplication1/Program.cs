@@ -24,7 +24,7 @@ namespace AttachmentImport
             //get base64 values of all the files in FilePath
             var documents = Directory.GetFiles(documentPath, "*", SearchOption.AllDirectories).ToList().ConvertBase64();
 
-            POC.Pipeline.Ingest();
+            POC.Pipeline.DocumentType();
             POC.Mapping.AutoMapping();
 
             List<FSCrawler> searchResults1 =  POC.Search.General();

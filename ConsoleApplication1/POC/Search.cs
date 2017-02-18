@@ -21,18 +21,18 @@ namespace AttachmentImport.POC
 
         /// <summary>
         /// General Search. Curl Equivalent Command:
-        /// curl -XGET 'http://10.1.1.229:9200/import/doc/_search' 
+        /// curl -XGET 'http://10.1.1.229:9200/vbc/doc/_search' 
         /// Use the Size parameter to set the max value of search result shown
         /// </summary>
         static public List<FSCrawler> General()
         {
-                var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("import").Type("doc").Size(100));
+                var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("vbc").Type("doc").Size(100));
                 return searchResult.Documents.ToList();
         }
 
         /// <summary>
         /// Searches for the term eve in the field meta.author. Curl Equivalent Command:
-        /// curl -XPOST 'http://10.1.1.229:9200/import/doc/_search' -d '
+        /// curl -XPOST 'http://10.1.1.229:9200/vbc/doc/_search' -d '
         ///	{
         ///	  "query":{
         ///		"match": {
@@ -44,13 +44,13 @@ namespace AttachmentImport.POC
         static public List<FSCrawler> NestedField()
         {
             var searchResult = elasticConnector.Search<FSCrawler>(
-                 s => s.Index("import").Type("doc").Query(q => q.Match(m => m.Field(f => f.meta.author).Query("eve"))));
+                 s => s.Index("vbc").Type("doc").Query(q => q.Match(m => m.Field(f => f.meta.author).Query("eve"))));
             return searchResult.Documents.ToList();
         }
 
         /// <summary>
         /// Searches the field meta.content for a term word and highlights the queried term in the specified Highlight field with <em></em>. Curl Equivalent Command:
-        /// curl -XPOST 'http://10.1.1.229:9200/import/doc/_search' -d '
+        /// curl -XPOST 'http://10.1.1.229:9200/vbc/doc/_search' -d '
         ///	{
         ///	  "query":{
         ///		"match": {
@@ -70,7 +70,7 @@ namespace AttachmentImport.POC
         {
             Dictionary<string,List<string>> dictionary = new Dictionary<string,List<string>>();
 
-            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("import").Type("doc").Query(q => q.Match(m => m.Field(f => f.content).Query("word"))).Highlight(h => h.Fields(fs => fs.Field(ff => ff.content))));
+            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("vbc").Type("doc").Query(q => q.Match(m => m.Field(f => f.content).Query("word"))).Highlight(h => h.Fields(fs => fs.Field(ff => ff.content))));
 
             //Creates a dictionary with the file name, and a list of hits
             foreach (var item in searchResult.Hits)
@@ -86,7 +86,7 @@ namespace AttachmentImport.POC
 
         /// <summary>
         /// Searches the field meta.raw.Application-name for a term "Microsoft Office Word", and highlights a term "Word" in the content field with <em></em>. Curl Equivalent Command:
-        ///curl -XPOST 'http://10.1.1.229:9200/import/doc/_search' -d '
+        ///curl -XPOST 'http://10.1.1.229:9200/vbc/doc/_search' -d '
         ///{
         ///	"query":{
         ///		"match": {
@@ -110,7 +110,7 @@ namespace AttachmentImport.POC
         {
             Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
 
-            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("import").Type("doc").Query(
+            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("vbc").Type("doc").Query(
                 q => q.Match(m => m.Field(f => f.meta.raw.AplicationNameKeyword).Query("Microsoft Office Word"))).Highlight(h => h.Fields(
                     fs => fs.Field(ff => ff.content).HighlightQuery(
                         hq => hq.Match(ma => ma.Field(fie => fie.content).Query("word"))
@@ -128,7 +128,7 @@ namespace AttachmentImport.POC
         /// Searches both the meta.raw.applicationname for the keyword "Microsoft Office Word" and the field meta.author for the value "robert" and returns only if both cases are matched.
         /// A Highlight is then done to the field "content" and the value "word", and the PreTags and PostTags are changed from the default to a defined value of <tag1></tag1>.
         /// Curl Equivalent Command:
-        ///  curl -XPOST 'http://10.1.1.229:9200/import/doc/_search' -d '
+        ///  curl -XPOST 'http://10.1.1.229:9200/vbc/doc/_search' -d '
         ///	 {
         ///		"query":{
         ///			"bool": {
@@ -159,7 +159,7 @@ namespace AttachmentImport.POC
             Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
 
             //Searhc Query parameter with highlighting
-            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("import").Type("doc").Query(
+            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("vbc").Type("doc").Query(
                 q => q.Bool(b=>b.Must(
                     m=>m.Term(t=>t.Field(f=>f.meta.raw.AplicationNameKeyword).Value("Microsoft Office Word")) & 
                     m.Term(tt=>tt.Field(f=>f.meta.author).Value("robert"))))).Highlight(
@@ -178,7 +178,7 @@ namespace AttachmentImport.POC
 
         /// <summary>
         /// Searches the field content for term microsof with fuzzy distance 1. Curl Equivalent Command:
-        ///	curl -XPOST 'http://10.1.1.229:9200/import/doc/_search' -d '
+        ///	curl -XPOST 'http://10.1.1.229:9200/vbc/doc/_search' -d '
         ///	{
         ///	  "query":{
         ///		"fuzzy": {
@@ -194,7 +194,7 @@ namespace AttachmentImport.POC
         {
             Dictionary<string, FSCrawler> dictionary = new Dictionary<string, FSCrawler>();
 
-            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("import").Type("doc").Query(q=>q.Fuzzy(fu=>fu.Field(f=>f.content).Fuzziness(Fuzziness.EditDistance(1)).Value("microsof"))));
+            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("vbc").Type("doc").Query(q=>q.Fuzzy(fu=>fu.Field(f=>f.content).Fuzziness(Fuzziness.EditDistance(1)).Value("microsof"))));
             
             foreach (var item in searchResult.Documents)
             {
@@ -207,7 +207,7 @@ namespace AttachmentImport.POC
         /// <summary>
         /// Using Scroll to retrieve large numbers of results from a single search request.You also need to specify how long you want the scroll to be alive for (in this case 1 min).
         /// Curl Equivalent Command:
-        /// curl -XPOST 'http://10.1.1.229:9200/vbc/example1/_search?scroll=1m' -d '
+        /// curl -XPOST 'http://10.1.1.229:9200/vbc/doc/_search?scroll=1m' -d '
         /// {
         ///     "size" : 100,
         ///     "query" : {
@@ -230,25 +230,13 @@ namespace AttachmentImport.POC
             Dictionary<int, List<FSCrawler>> dictionary = new Dictionary<int, List<FSCrawler>>();
 
             //Change the ElasticConnecter to have a default index in vbc for the bulk operation
-            var connection = ElasticConnector.Instance._settings.DefaultIndex("import");
-            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("import").Type("doc").Scroll("1m").Size(1));
+            var connection = ElasticConnector.Instance._settings.DefaultIndex("vbc");
+            var searchResult = elasticConnector.Search<FSCrawler>(s => s.Index("vbc").Type("doc").Scroll("1m").Size(2));
             
             
             //Search if the pages have documents in them.
             while (searchResult.Documents.Any())
             {
-                var request = new BulkRequest();
-                request.Operations = new List<IBulkOperation>();
-
-                //Store each document from each page in a list
-                foreach (var item in searchResult.Documents)
-                {
-                    request.Operations.Add(new BulkIndexOperation<FSCrawler>(item));
-                }
-                //Store result
-                var pageResult = elasticConnector.Bulk(request);
-
-            
                 //Go to the next page
                 searchResult = elasticConnector.Scroll<FSCrawler>("1m", searchResult.ScrollId);
 
@@ -259,9 +247,5 @@ namespace AttachmentImport.POC
             return dictionary;
         }
 
-        static public void ComplexSearch()
-        {
-
-        } 
     }
 }
