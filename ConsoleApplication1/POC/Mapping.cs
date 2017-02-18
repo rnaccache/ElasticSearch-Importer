@@ -27,6 +27,7 @@ namespace AttachmentImport.POC
         /// The below example shows how to override automapping for a nested value.
         /// If instantiated with automap, the value of attachment.author would be of type "text" in elastic search. Here we override the mapping to Date, while leaving the rest of the fields
         /// to be derived automatically. Curl Equivalent Command:
+        /// curl -XPUT 'http://10.1.1.229:9200/vbc' -d '
         ///	curl -XPUT 'vbc' -d '
         ///	{
         ///	  "mappings":{
@@ -42,11 +43,16 @@ namespace AttachmentImport.POC
         ///		}
         ///	  }
         ///	}'
-        /// This does not include the automap() as it does not need to be defined in ES
+        /// If you do not specify the TYPE, it automatically takes the name of the class being imported.
         /// </summary>
         public static void ManualMapping()
         {
             var mapper = elasticConnector.CreateIndex("vbc", c => c.Mappings(ms => ms.Map<Word>(m => m.Properties(ps => ps.Nested<MetaDataProperty>(p => p.Name(n=>n.attachment).Properties(pro=>pro.Date(dt=>dt.Name(nam=>nam.author))).AutoMap())))));
         }
+
+        /// <summary>
+        /// Manual Mapping can be done by using attributes on your POCO.
+        /// You can view Model WordManual for an example, setting the mapping there, and then using automap to apply the attribues.
+        /// </summary>
     }
 }

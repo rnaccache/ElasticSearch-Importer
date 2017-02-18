@@ -31,7 +31,7 @@ namespace AttachmentImport.Helper
         /// </summary>
         /// <param name="file">List of string with the path of the files</param>
         /// <returns></returns>
-        static public List<string> ConvertBase64(List<string> file)
+        static public List<string> ConvertBase64(this List<string> file)
         {
             List<string> res = new List<string>();
 

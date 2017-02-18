@@ -75,8 +75,9 @@
     <Compile Include="Helper\ElasticConnector.cs" />
     <Compile Include="Helper\DocumentControl.cs" />
     <Compile Include="Model\MetaDataProperty.cs" />
+    <Compile Include="Model\WordManual.cs" />
     <Compile Include="Model\Word.cs" />
-    <Compile Include="POC\Example1.cs" />
+    <Compile Include="POC\Input.cs" />
     <Compile Include="POC\Mapping.cs" />
     <Compile Include="POC\Pipeline.cs" />
     <Compile Include="POC\Search.cs" />
@@ -89,9 +90,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interface\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>

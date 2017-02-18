@@ -12,30 +12,21 @@ namespace AttachmentImport
 {
     class Program
     {
-    /// <summary>
-    /// Imports all files from specified FilePath to Elastic Searc 
-    /// </summary>
-    /// <param name="args"></param>
+        /// <summary>
+        /// Imports all files from specified FilePath to Elastic Searc 
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            
+
             string documentPath = ConfigurationManager.AppSettings.Get("FilePath");
-            string esIndex = ConfigurationManager.AppSettings.Get("");
-           
+
             //get base64 values of all the files in FilePath
-            var documents = DocumentControl.ConvertBase64(Directory.GetFiles(documentPath, "*", SearchOption.AllDirectories).ToList());
+            var documents = Directory.GetFiles(documentPath, "*", SearchOption.AllDirectories).ToList().ConvertBase64();
 
-            //POC.Pipeline.Ingest();
-            //POC.Mapping.AutoMapping();
-            POC.Mapping.ManualMapping();
-
-            //POC.Example1.IngestwithField(documents);
-            //POC.Example1.ViewResults(elasticConnector);
-            //POC.Search.Highlight();
-
-
-
-
+            POC.Pipeline.Ingest();
+            POC.Mapping.AutoMapping();
+            
         }
     }
 }

@@ -9,6 +9,8 @@ using Elasticsearch.Net;
 
 namespace AttachmentImport.Model
 {   /// <summary>
+    /// This is an example of setting your own mapping and analyzers for any data type
+    /// 
     /// Layout for model
     ///     |-data 
     ///     |-attachment
@@ -20,20 +22,29 @@ namespace AttachmentImport.Model
     ///          |-keywords
     ///          |-title
     ///          |-language
+    ///          
+    /// It is possible to define your mapping using attributes on your POCO.
+    /// When you use Attributes, you MUST use .AutoMap() in order for the attributes to be applied
+    /// 
     ///</summary>
 
-    public class Word
+    public class ExampleMapping
     {
         public string data { get; set; }
         public string size { get; set; }
-        public attachmentObj attachment { get; set; }
+        public NestedObject attachment { get; set; }
 
     }
 
     [ElasticsearchType]
-    public class attachmentObj
+    public class NestedObject
     {
+        //This is an example of setting the mapping for Author to Date in format "MMMddyy"
+        [Date(Format = "MMddyy")]
         public string author { get; set; }
+        //The below is an example of setting whitespace analyzer to the content field.
+        //list of analyzers can be found here: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-analyzers.html
+        [Text(Analyzer = "whitespace")]
         public string content { get; set; }
         public long content_length { get; set; }
         public string content_type { get; set; }       

@@ -12,7 +12,7 @@ namespace AttachmentImport.POC
    /// <summary>
    /// Add Metadata Field + any extra field
    /// </summary>
-    static class Example1
+    static class Input
     {
 
         static ElasticClient elasticConnector = ElasticConnector.Instance.Client;
@@ -48,6 +48,31 @@ namespace AttachmentImport.POC
         {
             var result = elasticConnector.Index(new Word { data = documents[1], size = "1000KB"  }, i => i.Index("vbc").Type("example1").Pipeline("attachment"));
         }   
+
+        /// <summary>
+        /// Used to bulk send every 1000 amount of documents to elasticsearch (instead of individually as above).
+        /// </summary>
+        /// <param name="documents"></param>
+        static public void InBulk(List<string> documents)
+        {
+            int ID = 1;
+            int bulkCounter = 1;
+
+            var descriptor = new BulkDescriptor();
+            foreach (var item in documents)
+            {
+                descriptor.Index<Word>(i => i.Index("vbc").Type("example1").Document(new Word { data = item }).Pipeline("attachment"));
+                //For every 1000 documents in descriptor, commit.
+                if(bulkCounter%1000 == 0)
+                {
+                    elasticConnector.Bulk(descriptor);
+                }
+                ID++;
+                bulkCounter++;
+            }
+            //Commit the remaining documents
+            elasticConnector.Bulk(descriptor);
+        }
 
     }
 }

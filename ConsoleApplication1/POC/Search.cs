@@ -27,10 +27,10 @@ namespace AttachmentImport.POC
         {
             var searchResult = elasticConnector.Search<Word>(s => s.Index("vbc").Type("example1").Size(100));
         }
-        
+
         /// <summary>
         /// Searches for the term Robert in the field attachment.content. Curl Equivalent Command:
-        ///	curl -XPOST 'vbc/example1/_search' -d '
+        /// curl -XPOST 'http://10.1.1.229:9200/vbc/example1/_search' -d '
         ///	{
         ///	  "query":{
         ///		"match": {
@@ -47,7 +47,7 @@ namespace AttachmentImport.POC
 
         /// <summary>
         /// Searches the field attachment.content for a term (robert) and highlights the queried term in the specified Highlight field with <em></em>. Curl Equivalent Command:
-        ///	curl -XPOST 'vbc/example1/_search' -d '
+        /// curl -XPOST 'http://10.1.1.229:9200/vbc/example1/_search' -d '
         ///	{
         ///	  "query":{
         ///		"match": {
@@ -73,10 +73,25 @@ namespace AttachmentImport.POC
 
         /// <summary>
         /// Searches the field attachment.content for a term (robert), and highlights a term (alex) in the attachment.content field with <em></em>. Curl Equivalent Command:
-        /// TODO: add curl command
-        /// 
-        /// 
-        /// 
+        ///curl -XPOST 'http://10.1.1.229:9200/vbc/example1/_search' -d '
+        ///{
+        ///	"query":{
+        ///		"match": {
+        ///			"attachment.content": "robert"
+        ///				}
+        ///					},
+        ///	"highlight":{
+        ///		"fields": {
+        ///			"attachment.content": {
+        ///				"highlight_query":{
+        ///					"match": {
+        ///						"attachment.content": "alex"
+        ///					}
+        ///				}
+        ///			}
+        ///		}
+        ///	}
+        ///}
         /// </summary>
         static public void Highlight2()
         {
@@ -92,7 +107,7 @@ namespace AttachmentImport.POC
 
         /// <summary>
         /// Searches the field attachment.content for term rober with fuzzy distance 1. Curl Equivalent Command:
-        ///	curl -XPOST 'vbc/example1/_search' -d '
+        ///	curl -XPOST 'http://10.1.1.229:9200/vbc/example1/_search' -d '
         ///	{
         ///	  "query":{
         ///		"fuzzy": {
@@ -116,14 +131,56 @@ namespace AttachmentImport.POC
             }
         }
 
+        /// <summary>
+        /// Using Scroll to retrieve large numbers of results from a single search request.You also need to specify how long you want the scroll to be alive for (in this case 1 min).
+        /// Curl Equivalent Command:
+        /// curl -XPOST 'http://10.1.1.229:9200/vbc/example1/_search?scroll=1m' -d '
+        /// {
+        ///     "size" : 100,
+        ///     "query" : {
+        ///         "match_all":{}
+        ///         }
+        /// }        
+        ///  
+        /// This search result displays the first 100 documents found, and creats a scroll_id which is used to point to the next page (also need to specify scroll life duration).
+        /// To query the next page the below Curl Command needs to be issued:
+        /// 
+        /// curl -XPOST /_search/scroll' -d '
+        /// {
+        ///     "scroll" : "1m",
+        ///     "scroll_id" : "value obtained fromt the previous search"
+        ///} 
+        /// </summary>
         static public void Scroll()
         {
-            var searchResult = elasticConnector.Search<Word>(s => s.Index("vbc").Type("example1").Scroll("1m"));
-            string scrollid = searchResult.ScrollId;
+
+            //Change the ElasticConnecter to have a default index in vbc for the bulk operation
+            var connection = ElasticConnector.Instance._settings.DefaultIndex("vbc");
+            var searchResult = elasticConnector.Search<Word>(s => s.Index("vbc").Type("example1").Scroll("1m").Size(100));
+            
+            
+            //Search if the pages have documents in them.
+            while (searchResult.Documents.Any())
+            {
+                var request = new BulkRequest();
+                request.Operations = new List<IBulkOperation>();
+
+                //Store each document from each page in a list
+                foreach (var item in searchResult.Documents)
+                {
+                    request.Operations.Add(new BulkIndexOperation<Word>(item));
+                }
+                //Store result
+                var pageResult = elasticConnector.Bulk(request);
+            
+                //Go to the next page
+                searchResult = elasticConnector.Scroll<Word>("1m", searchResult.ScrollId);
+
+            }
+
+
 
 
         }
-
-        
     }
 }
