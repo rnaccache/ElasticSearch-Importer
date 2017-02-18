@@ -47,7 +47,7 @@ namespace AttachmentImport.POC
         /// </summary>
         public static void ManualMapping()
         {
-            var mapper = elasticConnector.CreateIndex("vbc", c => c.Mappings(ms => ms.Map<Word>(m => m.Properties(ps => ps.Nested<MetaDataProperty>(p => p.Name(n=>n.attachment).Properties(pro=>pro.Date(dt=>dt.Name(nam=>nam.author))).AutoMap())))));
+            var mapper = elasticConnector.CreateIndex("vbc", c => c.Mappings(ms => ms.Map<Word>(m => m.Properties(ps => ps.Nested<Word>(p => p.Name(n=>n.attachment).Properties(pro=>pro.Date(dt=>dt.Name(nam=>nam.attachment.author))).AutoMap())))));
         }
 
         /// <summary>

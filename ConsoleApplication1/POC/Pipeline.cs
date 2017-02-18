@@ -37,7 +37,11 @@ namespace AttachmentImport.POC
         /// </summary>
         public static void Ingest()
         {
-            var result = elasticConnector.PutPipeline("attachment", p => p.Processors(ps => ps.Attachment<Word>(a => a.Field(f => f.data).IndexedCharacters(-1)).Remove<Word>(r => r.Field(fi => fi.data))));
+            var result = elasticConnector.PutPipeline(
+                "attachment", 
+                p => p.Processors(ps => ps.Attachment<Word>(
+                    a => a.Field(f => f.data).IndexedCharacters(-1)
+                ).Remove<Word>(r => r.Field(fi => fi.data))));
         }
     }
 }

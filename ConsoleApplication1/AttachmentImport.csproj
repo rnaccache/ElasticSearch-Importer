@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Helper\ElasticConnector.cs" />
     <Compile Include="Helper\DocumentControl.cs" />
+    <Compile Include="Model\FSCrawler.cs" />
     <Compile Include="Model\MetaDataProperty.cs" />
     <Compile Include="Model\WordManual.cs" />
     <Compile Include="Model\Word.cs" />

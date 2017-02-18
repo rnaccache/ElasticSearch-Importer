@@ -18,7 +18,7 @@ namespace AttachmentImport
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-
+            
             string documentPath = ConfigurationManager.AppSettings.Get("FilePath");
 
             //get base64 values of all the files in FilePath
@@ -26,7 +26,14 @@ namespace AttachmentImport
 
             POC.Pipeline.Ingest();
             POC.Mapping.AutoMapping();
-            
+
+            List<FSCrawler> searchResults1 =  POC.Search.General();
+            List<FSCrawler> searchResult2 = POC.Search.NestedField();
+            Dictionary<string,List<string>> searchResult3 = POC.Search.Highlight();
+            Dictionary<string,List<string>> searchResult4 = POC.Search.Highlight2();
+            Dictionary<string, List<string>> searchResult5 = POC.Search.Highlight3();
+            Dictionary<string, FSCrawler> searchResult6 = POC.Search.Fuzzy();
+            Dictionary<int,List<FSCrawler>> searchresult7 = POC.Search.Scroll();
         }
     }
 }
